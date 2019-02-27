@@ -61,3 +61,4 @@ typings/
 .next
 /public/previews
 /client/node_modules
+/logs
