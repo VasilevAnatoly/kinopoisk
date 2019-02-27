@@ -62,12 +62,15 @@ let scrapeTopMonthMovies = () => {
                 //         _page.then(page => page.close());
                 //         callback();
                 //     });
-                let movies = scrapeMoviesTableByDate(_browser, dayString);
-                movies.forEach(movie => {
-                    movie.date = dayString;
+                scrapeMoviesTableByDate(_browser, dayString).then(movies => {
+                    movies.forEach(movie => {
+                        movie.date = dayString;
+                    });
+                    allmovies = allmovies.concat(movies);
+                    callback();
+                }).catch(err => {
+                    callback(err);
                 });
-                allmovies = allmovies.concat(movies);
-                callback();
             },
             function (err) {
                 if (err) {
@@ -81,35 +84,41 @@ let scrapeTopMonthMovies = () => {
 };
 
 let scrapeMoviesTableByDate = (_browser, dayString) => {
-    let _page;
-    _browser.then(browser => (_page = browser.newPage()))
-        .then(page => page.goto(`https://www.kinopoisk.ru/top/day/${dayString}`, {
-            waitUntil: 'domcontentloaded'
-        }))
-        .then(() => _page)
-        .then(page => page.$$eval(
-            "[id^='top250_place_']",
-            nodes =>
-            nodes.map(element => {
-                let position = element.querySelector("td:nth-child(1) > a").getAttribute("name");
-                let fullName = element.querySelector("td:nth-child(2) > a") ? element.querySelector("td:nth-child(2) > a").innerText : null;
-                let rate = element.querySelector("td:nth-child(3) > div a") ? parseFloat(element.querySelector("td:nth-child(3) > div a").innerText) : null;
-                let originName = element.querySelector("td:nth-child(2) > span") !== null ? element.querySelector("td:nth-child(2) > span").innerText : null;
-                let link = element.querySelector("td:nth-child(2) > a").href;
+    return new Promise((resolve, reject) => {
+        try {
+            let _page;
+            _browser.then(browser => (_page = browser.newPage()))
+                .then(page => page.goto(`https://www.kinopoisk.ru/top/day/${dayString}`, {
+                    waitUntil: 'domcontentloaded'
+                }))
+                .then(() => _page)
+                .then(page => page.$$eval(
+                    "[id^='top250_place_']",
+                    nodes =>
+                    nodes.map(element => {
+                        let position = element.querySelector("td:nth-child(1) > a").getAttribute("name");
+                        let fullName = element.querySelector("td:nth-child(2) > a") ? element.querySelector("td:nth-child(2) > a").innerText : null;
+                        let rate = element.querySelector("td:nth-child(3) > div a") ? parseFloat(element.querySelector("td:nth-child(3) > div a").innerText) : null;
+                        let originName = element.querySelector("td:nth-child(2) > span") !== null ? element.querySelector("td:nth-child(2) > span").innerText : null;
+                        let link = element.querySelector("td:nth-child(2) > a").href;
 
-                return {
-                    position: position,
-                    name: fullName.substring(0, fullName.length - 7),
-                    origin_name: originName ? originName : fullName.substring(0, fullName.length - 7),
-                    rate: rate,
-                    year: fullName.substring(fullName.length - 5, fullName.length - 1),
-                    link: link
-                };
-            })
-        )).then(movies => {
-            _page.then(page => page.close());
-            return movies;
-        });
+                        return {
+                            position: position,
+                            name: fullName.substring(0, fullName.length - 7),
+                            origin_name: originName ? originName : fullName.substring(0, fullName.length - 7),
+                            rate: rate,
+                            year: fullName.substring(fullName.length - 5, fullName.length - 1),
+                            link: link
+                        };
+                    })
+                )).then(movies => {
+                    _page.then(page => page.close());
+                    resolve(movies);
+                });
+        } catch (err) {
+            reject(err);
+        }
+    });
 }
 
 let scrapeMoviesInfo = (moviesArray) => {
@@ -160,16 +169,20 @@ let scrapeMoviesInfo = (moviesArray) => {
                         //         page.close();
                         //         callback();
                         //     });
-                        let info = scrapeMovieInfo(_browser, movie.link);
-                        movie.description = info.description;
-                        try {
-                            let imagePath = "/previews/preview" + '-' + Date.now() + ".jpg";
-                            downloadMoviePreview(info.imageUrl, "public" + imagePath);
-                            movie.image = imagePath;
-                            callback();
-                        } catch (err) {
+                        scrapeMovieInfo(_browser, movie.link).then(movieInfo => {
+                            try {
+                                let imagePath = "/previews/preview" + '-' + Date.now() + ".jpg";
+                                downloadMoviePreview(movieInfo.imageUrl, "public" + imagePath);
+                                movie.image = imagePath;
+                                movie.description = movieInfo.description;
+                                callback();
+                            } catch (err) {
+                                callback(err);
+                            }
+                        }).catch(err => {
                             callback(err);
-                        }
+                        });
+
                     },
                     function (err) {
                         if (err) {
@@ -200,42 +213,48 @@ let scrapeMoviesInfo = (moviesArray) => {
 };
 
 let scrapeMovieInfo = (_browser, movieLink) => {
-    let _page;
-    let _description = '';
-    let _imageUrl = '';
+    return new Promise((resolve, reject) => {
+        try {
+            let _page;
+            let _description = '';
+            let _imageUrl = '';
 
-    _browser.then(browser => (_page = browser.newPage()))
-        .then(page => page.goto(movieLink, {
-            waitUntil: 'domcontentloaded'
-        }))
-        .then(() => _page)
-        .then(page => page.$eval(
-            ".film-synopsys",
-            element => {
-                return element.innerText;
-            }
-        ))
-        .then(description => {
-            _description = description;
-        })
-        .then(() => _page)
-        .then(page => page.$eval(
-            "a.popupBigImage > img",
-            element => {
-                return element.src;
-            }
-        ))
-        .then(imageUrl => {
-            _imageUrl = imageUrl;
-        })
-        .then(() => _page)
-        .then(page => {
-            page.close();
-            return {
-                description: _description,
-                imageUrl: _imageUrl
-            }
-        });
+            _browser.then(browser => (_page = browser.newPage()))
+                .then(page => page.goto(movieLink, {
+                    waitUntil: 'domcontentloaded'
+                }))
+                .then(() => _page)
+                .then(page => page.$eval(
+                    ".film-synopsys",
+                    element => {
+                        return element.innerText;
+                    }
+                ))
+                .then(description => {
+                    _description = description;
+                })
+                .then(() => _page)
+                .then(page => page.$eval(
+                    "a.popupBigImage > img",
+                    element => {
+                        return element.src;
+                    }
+                ))
+                .then(imageUrl => {
+                    _imageUrl = imageUrl;
+                })
+                .then(() => _page)
+                .then(page => {
+                    page.close();
+                    resolve({
+                        description: _description,
+                        imageUrl: _imageUrl
+                    });
+                });
+        } catch (err) {
+            reject(err);
+        }
+    });
 }
 
 

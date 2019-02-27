@@ -1,3 +1,4 @@
+require('dotenv').config();
 const Sequelize = require('sequelize');
 const CommentModel = require('./models/comment');
 const DateModel = require('./models/date');
@@ -34,7 +35,7 @@ DateEntity.belongsToMany(MovieEntity, {
 });
 
 sequelize.sync({
-        force: false
+        force: true
     })
     .then(() => {
         console.log(`Database & tables created!`)
