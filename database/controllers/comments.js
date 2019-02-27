@@ -1,6 +1,7 @@
 const CommentEntity = require("../index").CommentEntity;
 
-function addCommentToMovie(author, comment, movieId) {
+// Функция для сохранения в БД нового комментария к фильму
+let addCommentToMovie = (author, comment, movieId) => {
     return CommentEntity.create({
         author: author,
         comment: comment,
@@ -10,7 +11,7 @@ function addCommentToMovie(author, comment, movieId) {
     });
 }
 
-function newCommentLikeDislike(commentId, like) {
+let newCommentLikeDislike = (commentId, like) => {
     return CommentEntity.increment(like === "like" ? 'likes' : 'dislikes', {
         where: {
             id: commentId

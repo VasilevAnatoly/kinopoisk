@@ -1,6 +1,7 @@
 const DateEntity = require("../index").DateEntity;
 
-function createDates(datesArray) {
+// Функция для сохранения в БД информации о сразу нескольких датах
+let createDates = (datesArray) => {
     return new Promise((resolve, reject) => {
         let dates = [];
         datesArray.forEach(date => {

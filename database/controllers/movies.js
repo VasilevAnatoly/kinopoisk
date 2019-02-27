@@ -3,7 +3,8 @@ const DateEntity = require("../index").DateEntity;
 const CommentEntity = require("../index").CommentEntity;
 const DateMovieEntity = require("../index").DateMovieEntity;
 
-function getMovies(req, res) {
+// Получение информации из БД о топ-10 фильмах на выбранную дату
+let getMovies = (req, res) => {
     MovieEntity.findAll({
             limit: 10,
             attributes: ['id', 'name', 'origin_name', 'year', 'rate'],
@@ -35,7 +36,8 @@ function getMovies(req, res) {
         });
 }
 
-function getMovieById(req, res) {
+// Получение информации из БД о конкретном фильме, включая комментарии
+let getMovieById = (req, res) => {
     MovieEntity.findOne({
             where: {
                 id: req.params.movieId
@@ -60,7 +62,8 @@ function getMovieById(req, res) {
         });
 }
 
-function newMovieLikeDislike(movieId, like) {
+// Сохранение нового лайка/дизлайка у фильма в БД
+let newMovieLikeDislike = (movieId, like) => {
     return MovieEntity.increment(like === "like" ? 'likes' : 'dislikes', {
         where: {
             id: movieId
@@ -68,7 +71,8 @@ function newMovieLikeDislike(movieId, like) {
     });
 }
 
-function createMovies(moviesArray) {
+// Функция для сохранения в БД информации о сразу нескольких фильмах
+let createMovies = (moviesArray) => {
     return new Promise((resolve, reject) => {
         MovieEntity.bulkCreate(moviesArray, {
                 returning: true

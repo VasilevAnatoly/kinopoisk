@@ -5,6 +5,7 @@ const DateModel = require('./models/date');
 const MovieModel = require('./models/movie');
 const DateMovieModel = require('./models/date_movie');
 
+// Конфигурируем подключение к БД
 const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASS, {
     host: process.env.DB_HOST,
     dialect: 'mysql',
@@ -17,11 +18,13 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, proces
     }
 });
 
+// Определяем модели для хранения данных в таблицах
 const DateEntity = DateModel(sequelize, Sequelize);
 const CommentEntity = CommentModel(sequelize, Sequelize);
 const MovieEntity = MovieModel(sequelize, Sequelize);
 const DateMovieEntity = DateMovieModel(sequelize, Sequelize);
 
+// Определяем соотношения между таблицами и моделями
 MovieEntity.hasMany(CommentEntity);
 
 MovieEntity.belongsToMany(DateEntity, {
@@ -34,6 +37,7 @@ DateEntity.belongsToMany(MovieEntity, {
     foreignKey: "dateId"
 });
 
+// Подключаемся к БД
 sequelize.sync({
         force: false
     })

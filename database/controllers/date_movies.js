@@ -1,6 +1,7 @@
 const DateMovieEntity = require("../index").DateMovieEntity;
 
-function createDateMovies(dateMoviesArray) {
+// Функия для сохранения в БД информации о позициях фильмов на конкретные даты
+let createDateMovies = (dateMoviesArray) => {
     return new Promise((resolve, reject) => {
         DateMovieEntity.bulkCreate(dateMoviesArray, {
                 returning: true
