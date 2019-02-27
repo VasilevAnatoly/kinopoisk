@@ -10,17 +10,17 @@ const movies = controllers.movies;
 const dates = controllers.dates;
 const dateMovies = controllers.dateMovies;
 
+let today = new Date();
+let month28days = [today.toISOString().substring(0, 10)];
+
+for (var i = 1; i < 28; i++) {
+    let date = new Date();
+    date.setDate(today.getDate() - i);
+    month28days.push(date.toISOString().substring(0, 10));
+}
+
 let scrapeTopMonthMovies = () => {
     return new Promise((resolve, reject) => {
-        let today = new Date();
-        let month28days = [today.toISOString().substring(0, 10)];
-
-        for (var i = 1; i < 28; i++) {
-            let date = new Date();
-            date.setDate(today.getDate() - i);
-            month28days.push(date.toISOString().substring(0, 10));
-        }
-
         let allmovies = [];
 
         const _browser = puppeteer.launch({
@@ -101,9 +101,9 @@ let scrapeMoviesInfo = (moviesArray) => {
             args: ['--start-maximized']
         });
 
-        let asyncFunc = (movies10Array) => {
+        let asyncFunc = (movies5Array) => {
             return new Promise((resolve, reject) => {
-                async.each(movies10Array, (movie, callback) => {
+                async.each(movies5Array, (movie, callback) => {
                         scrapeMovieInfo(_browser, movie.link).then(movieInfo => {
                             try {
                                 let imagePath = "/previews/preview" + '-' + Date.now() + ".jpg";
@@ -205,15 +205,6 @@ scrapeTopMonthMovies().then((scrapedMovies) => {
     var uniqueMovies = _.uniq(scrapedMovies, (movie) => {
         return movie.name;
     });
-
-    let today = new Date();
-    let month28days = [today.toISOString().substring(0, 10)];
-
-    for (var i = 1; i < 28; i++) {
-        let prevDay = new Date();
-        prevDay.setDate(today.getDate() - i);
-        month28days.push(prevDay.toISOString().substring(0, 10));
-    }
 
     dates.createDates(month28days).then((datesEntities) => {
         scrapeMoviesInfo(uniqueMovies).then(() => {
