@@ -1,5 +1,4 @@
 import io from 'socket.io-client';
-import querystring from 'querystring';
 import {
 	socketTypes
 } from 'kinopoisk/store/constants';
@@ -42,7 +41,6 @@ function evaluate(action, option) {
 
 let socket = null;
 let connection = false;
-let access_token = null;
 
 export default function socketIoMiddleware({
 	getState,

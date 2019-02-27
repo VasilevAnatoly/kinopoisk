@@ -4,6 +4,8 @@ import {
   push
 } from 'connected-react-router'
 
+
+// Middleware для обработки отправки запросов на сервер и получения ответа от сервера
 export default function requestMiddleware({
   getState,
   dispatch
@@ -53,9 +55,6 @@ export default function requestMiddleware({
       .catch((error) => {
 
         if (error.response) {
-          // The request was made and the server responded with a status code
-          // that falls out of the range of 2xx
-
           const statusText = error.response.data;
           dispatch({
             ...rest,
@@ -67,9 +66,6 @@ export default function requestMiddleware({
 
           if (error.response.status === 401) {}
         } else if (error.request) {
-          // The request was made but no response was received
-          // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-          // http.ClientRequest in node.js
           dispatch({
             ...rest,
             ...{
@@ -78,9 +74,8 @@ export default function requestMiddleware({
             type: FAIL
           });
         }
-        //вызывается если произошла ошибка в чтении полученных
+        //вызывается если произошла ошибка в чтении полученных данных
         else if (!request_success) {
-          // Something happened in setting up the request that triggered an Error
           dispatch({
             ...rest,
             ...{

@@ -1,3 +1,5 @@
+// Middleware для постановки actions в очередь в случае необходимости задержки их вызова
+
 const asyncDispatchMiddleware = store => next => action => {
   let syncActivityFinished = false;
   let actionQueue = [];

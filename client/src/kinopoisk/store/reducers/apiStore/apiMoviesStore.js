@@ -21,6 +21,8 @@ const initialMovie = {
     movie: null,
 };
 
+
+// Store для хранения информации о топ-10 фильмах на выбранную пользователем дату
 function topMovies(state = initialMovies, {
     type,
     data,
@@ -54,6 +56,7 @@ function topMovies(state = initialMovies, {
     }
 }
 
+// Store для хранения информации о конкретном фильме и обработки поступления нового комментария к фильму или лайка/дизлайка
 function movie(state = initialMovie, {
     type,
     data,

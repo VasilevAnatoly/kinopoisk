@@ -1,3 +1,5 @@
+//Компонент для отображения карточки комментария
+
 import React from 'react';
 import {
     Col, Label, Card, CardText, CardBody,

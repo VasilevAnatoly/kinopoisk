@@ -1,3 +1,5 @@
+//Компонент для отображения формы с вводом комментария
+
 import React from 'react';
 import {
     Col, Button, Form, FormGroup, Label, Input

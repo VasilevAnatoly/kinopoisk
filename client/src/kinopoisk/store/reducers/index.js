@@ -5,13 +5,11 @@ import {
   routerReducer as router
 } from 'react-router-redux/lib';
 
-// import alertStore from './alertStore';
 import apiStore from './apiStore';
 
 
 export const makeRootReducer = (asyncReducers) => {
   return combineReducers({
-    // alertStore,
     apiStore,
     router,
     ...asyncReducers

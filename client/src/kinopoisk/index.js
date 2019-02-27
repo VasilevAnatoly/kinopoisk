@@ -27,8 +27,6 @@ import Popper from 'popper.js';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 
 window.jQuery = window.$ = $;
-// require('vendor/bootstrap.min.js');
-
 
 // ========================================================
 // Browser History Setup

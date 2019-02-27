@@ -2,31 +2,30 @@ import {
   socketTypes
 } from 'kinopoisk/store/constants';
 
-// https://github.com/axios/axios
+// Действие для подключения клиента к серверу
 export function connectToSocket(actionId) {
   return {
-    //тип определяющий обрабатывающий редюсер
     type: socketTypes.SOCKET_CONNECT,
   };
 }
 
+// Действие для добавления лайка/дизлайка к фильму через сокеты
 export function addMovieLikeDislike(data) {
   return {
-    //тип определяющий обрабатывающий редюсер
+    // Определение типа действия
     type: socketTypes.SOCKET_ADD_MOVIE_LIKE_DISLIKE,
-    //объект socket служит для конфигурации socket.io
     socket: {
       emit: 'addMovieLikeDislike',
+      // Передача данных
       data: data
     }
   };
 }
 
+// Действие для добавления лайка/дизлайка к комментарию через сокеты
 export function addCommentLikeDislike(data) {
   return {
-    //тип определяющий обрабатывающий редюсер
     type: socketTypes.SOCKET_ADD_COMMENT_LIKE_DISLIKE,
-    //объект socket служит для конфигурации socket.io
     socket: {
       emit: 'addCommentLikeDislike',
       data: data
@@ -34,11 +33,10 @@ export function addCommentLikeDislike(data) {
   };
 }
 
+// Действие для добавления комментария к фильму через сокеты
 export function addCommentToMovie(data) {
   return {
-    //тип определяющий обрабатывающий редюсер
     type: socketTypes.SOCKET_ADD_COMMENT_TO_MOVIE,
-    //объект socket служит для конфигурации socket.io
     socket: {
       emit: 'addCommentToMovie',
       data: data

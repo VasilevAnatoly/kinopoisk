@@ -20,8 +20,7 @@ import {
 
 export default (initialState = {}, history) => {
   // ======================================================
-  // Middleware Configuration Применяются справа налево, в данном случае
-  // свойство asyncDispatch объекта action будет доступно в socketIoMiddleware и requestMiddleware
+  // Middleware Configuration
   // ======================================================
   const middleware = [thunk, requestMiddleware, socketIoMiddleware, asyncDispatchMiddleware, routerMiddleware(history)]
 
@@ -38,7 +37,7 @@ export default (initialState = {}, history) => {
   }
 
   // ======================================================
-  // Store Instantiation and HMR Setup
+  // Store Instantiation
   // ======================================================
   const store = createStore(
     connectRouter(history)(makeRootReducer()),

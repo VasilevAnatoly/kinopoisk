@@ -36,16 +36,19 @@ class Movie extends React.Component {
     }
 
     toggle() {
+        //Показ/скрытие модального окна с сообщение об ошибке
         this.setState(prevState => ({
             modal: !prevState.modal
         }));
     }
 
     onChange = (event) => {
+        //Обработка ввода пользоваталем символов в текстовые поля формы
         this.setState({ [event.target.name]: event.target.value });
     }
 
     onMovieLikeDislikeClick = (like) => {
+        //Отправка данных о новом лайке/дизлайке фильма через сокеты
         this.props.addMovieLikeDislike({
             movieId: this.state.movieId,
             like: like
@@ -53,6 +56,7 @@ class Movie extends React.Component {
     }
 
     onCommentLikeDislikeClick = (commentId, like) => {
+        //Отправка данных о новом лайке/дизлайке комментария через сокеты
         this.props.addCommentLikeDislike({
             commentId: commentId,
             like: like
@@ -61,11 +65,13 @@ class Movie extends React.Component {
 
 
     addComment = (e) => {
+        // Обработка события отправки формы с новым комментарием пользователя к фильму
         e.preventDefault();
         e.stopPropagation();
         if (!this.state.author.trim().length || !this.state.comment.trim().length) {
             this.toggle();
         } else {
+            //Отправка данных из формы на сервер
             this.props.addCommentToMovie(this.state);
             this.setState({
                 author: '',

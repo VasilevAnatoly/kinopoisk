@@ -1,3 +1,5 @@
+// Определение рутов АПИ
+
 let apiBase = 'http://localhost:3000';
 export const API_BASE = apiBase;
 
