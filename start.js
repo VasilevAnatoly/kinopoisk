@@ -29,39 +29,6 @@ let scrapeTopMonthMovies = () => {
         });
 
         async.each(month28days, (dayString, callback) => {
-                // let _page;
-                // _browser.then(browser => (_page = browser.newPage()))
-                //     .then(page => page.goto(`https://www.kinopoisk.ru/top/day/${dayString}`, {
-                //         waitUntil: 'domcontentloaded'
-                //     }))
-                //     .then(() => _page)
-                //     .then(page => page.$$eval(
-                //         "[id^='top250_place_']",
-                //         nodes =>
-                //         nodes.map(element => {
-                //             let position = element.querySelector("td:nth-child(1) > a").getAttribute("name");
-                //             let fullName = element.querySelector("td:nth-child(2) > a") ? element.querySelector("td:nth-child(2) > a").innerText : null;
-                //             let rate = element.querySelector("td:nth-child(3) > div a") ? parseFloat(element.querySelector("td:nth-child(3) > div a").innerText) : null;
-                //             let originName = element.querySelector("td:nth-child(2) > span") !== null ? element.querySelector("td:nth-child(2) > span").innerText : null;
-                //             let link = element.querySelector("td:nth-child(2) > a").href;
-
-                //             return {
-                //                 position: position,
-                //                 name: fullName.substring(0, fullName.length - 7),
-                //                 origin_name: originName ? originName : fullName.substring(0, fullName.length - 7),
-                //                 rate: rate,
-                //                 year: fullName.substring(fullName.length - 5, fullName.length - 1),
-                //                 link: link
-                //             };
-                //         })
-                //     )).then(movies => {
-                //         movies.forEach(movie => {
-                //             movie.date = dayString;
-                //         });
-                //         allmovies = allmovies.concat(movies);
-                //         _page.then(page => page.close());
-                //         callback();
-                //     });
                 scrapeMoviesTableByDate(_browser, dayString).then(movies => {
                     movies.forEach(movie => {
                         movie.date = dayString;
@@ -137,38 +104,6 @@ let scrapeMoviesInfo = (moviesArray) => {
         let asyncFunc = (movies10Array) => {
             return new Promise((resolve, reject) => {
                 async.each(movies10Array, (movie, callback) => {
-                        // let _page;
-                        // _browser.then(browser => (_page = browser.newPage()))
-                        //     .then(page => page.goto(movie.link, {
-                        //         waitUntil: 'domcontentloaded'
-                        //     }))
-                        //     .then(() => _page)
-                        //     .then(page => page.$eval(
-                        //         ".film-synopsys",
-                        //         element => {
-                        //             return element.innerText;
-                        //         }
-                        //     ))
-                        //     .then(description => {
-                        //         movie.description = description;
-                        //     })
-                        //     .then(() => _page)
-                        //     .then(page => page.$eval(
-                        //         "a.popupBigImage > img",
-                        //         element => {
-                        //             return element.src;
-                        //         }
-                        //     ))
-                        //     .then(imageUrl => {
-                        //         let imagePath = "/previews/preview" + '-' + Date.now() + ".jpg";
-                        //         downloadMoviePreview(imageUrl, "public" + imagePath);
-                        //         movie.image = imagePath;
-                        //     })
-                        //     .then(() => _page)
-                        //     .then(page => {
-                        //         page.close();
-                        //         callback();
-                        //     });
                         scrapeMovieInfo(_browser, movie.link).then(movieInfo => {
                             try {
                                 let imagePath = "/previews/preview" + '-' + Date.now() + ".jpg";
