@@ -6,12 +6,19 @@ var fs = require('fs');
 var log = require('./libs/log')(module);
 var cookieParser = require('cookie-parser');
 var paths = require('./paths.js')
+
+// Инициализация Express
 var initExpress = require('./init/express.js');
+
+// Инициализация рутов на сервере
 var initRoutes = require('./routes');
+
+//Инициализация подключения сокетов
 var initSocket = require('../socket');
 
 const port = process.env.PORT || 3000;
 
+// Создание папки для хранения превью фильмов
 function createFolder(path) {
     if (!fs.existsSync(path))
         fs.mkdirSync(path);

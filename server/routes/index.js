@@ -3,6 +3,7 @@ var htmlRoutes = require('./html'),
 
 module.exports = (app) => {
   app.all('/*', function (req, res, next) {
+    // Определение заголовков запроса
     if (req.method === 'OPTIONS') {
       var headers = {};
       // IE8 does not allow domains to be specified, just the *
@@ -17,6 +18,7 @@ module.exports = (app) => {
     } else next();
   });
 
+  // Инициализация рутов
   app.use('/', htmlRoutes);
   app.use('/api/movies', apiMovies);
 };

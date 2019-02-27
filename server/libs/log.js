@@ -1,3 +1,5 @@
+// Логирование сообщений об ошибках
+
 const {
     createLogger,
     format,

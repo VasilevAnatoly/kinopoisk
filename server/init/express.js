@@ -1,3 +1,5 @@
+// Подключение необходимых библиотек
+
 var bodyParser = require('body-parser');
 var gzip = require('compression');
 var helmet = require('helmet');
