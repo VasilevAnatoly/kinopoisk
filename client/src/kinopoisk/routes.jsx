@@ -4,6 +4,7 @@ import { Route, Switch } from 'react-router-dom';
 import App from './components/App';
 import TopMovies from './components/pages/TopMovies'
 import Movie from './components/pages/Movie'
+import NotFound from './components/NotFound'
 
 const routes = (
     <Switch>
@@ -15,6 +16,7 @@ const routes = (
             path="/movies/:id"
             render={() => <App><Movie /></App>}
         />
+        <Route render={() => <App><NotFound /></App>} />
     </Switch>
 );
 
