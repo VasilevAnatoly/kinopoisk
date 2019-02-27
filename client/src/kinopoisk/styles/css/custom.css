@@ -1,0 +1,17 @@
+.fa-thumbs-up:hover,
+.fa-thumbs-down:hover {
+    cursor: pointer;
+}
+
+.fa-thumbs-up {
+    color: green;
+}
+
+.fa-thumbs-down {
+    color: red;
+}
+
+/* .row {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+} */
