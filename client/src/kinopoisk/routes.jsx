@@ -16,7 +16,7 @@ const routes = (
             path="/movies/:id"
             render={() => <App><Movie /></App>}
         />
-        <Route render={() => <App><NotFound /></App>} />
+        <Route notFound={true} render={() => <App><NotFound /></App>} />
     </Switch>
 );
 
