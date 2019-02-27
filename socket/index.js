@@ -1,5 +1,6 @@
 const controllers = require('./controllers');
 
+// Конфигурируем подключение
 module.exports = (io) => {
     io.on('connection', async function (client) {
         try {
@@ -17,6 +18,8 @@ module.exports = (io) => {
                 }
                 return next();
             });
+
+            //Вешаем обработчики на события, вызываемые на сервере с клиента
             client.on('addCommentLikeDislike', controllers.addCommentLikeDislike);
             client.on('addMovieLikeDislike', controllers.addMovieLikeDislike);
             client.on('addCommentToMovie', controllers.addCommentToMovie);

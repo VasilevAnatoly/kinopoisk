@@ -2,11 +2,15 @@ const controllers = require("../database/controllers");
 const comments = controllers.comments;
 const movies = controllers.movies;
 
+// Функция для обработки сохранения в БД лайка/дизлайка у комментария
 function addCommentLikeDislike(data) {
   const client = this;
+  // Вызов функции сохранения данных В БД
   comments.newCommentLikeDislike(data.body.commentId, data.body.like)
     .then(() => {
+      // Отправка события и данных клиенту, вызвавшему действие
       client.emit("newCommentLikeDislike", data.body);
+      // Отправка события и данных всем остальным подключенным клиентам
       client.broadcast.emit("newCommentLikeDislike", data.body);
     })
     .catch(err => {
@@ -14,6 +18,7 @@ function addCommentLikeDislike(data) {
     });
 }
 
+// Функция для обработки сохранения в БД лайка/дизлайка у фильма
 function addMovieLikeDislike(data) {
   const client = this;
   movies.newMovieLikeDislike(data.body.movieId, data.body.like)
@@ -26,6 +31,7 @@ function addMovieLikeDislike(data) {
     });
 }
 
+// Функция для обработки сохранения в БД комментария к фильму
 function addCommentToMovie(data) {
   const client = this;
   comments.addCommentToMovie(data.body.author, data.body.comment, data.body.movieId)
