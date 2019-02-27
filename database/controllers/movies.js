@@ -48,7 +48,7 @@ function getMovieById(req, res) {
             if (movie) {
                 res.status(200).send(movie);
             } else {
-                res.send({
+                res.status(404).send({
                     message: `Could not find movie by id = ${req.params.movieId}`
                 });
             }

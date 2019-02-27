@@ -35,7 +35,7 @@ window.jQuery = window.$ = $;
 // ========================================================
 
 const history = createBrowserHistory({
-    basename: '/top/',
+    basename: '/top',
 });
 
 const initialState = loadState();

@@ -18,7 +18,7 @@ const initialMovie = {
     loading: false,
     loaded: false,
     errors: null,
-    movie: {},
+    movie: null,
 };
 
 function topMovies(state = initialMovies, {
@@ -80,6 +80,7 @@ function movie(state = initialMovie, {
                 ...state,
                 loading: false,
                 loaded: true,
+                movie: null,
                 errors: errors ? errors : null,
             }
         case socketTypes.NEW_COMMENT_TO_MOVIE:

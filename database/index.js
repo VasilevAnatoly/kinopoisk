@@ -35,7 +35,7 @@ DateEntity.belongsToMany(MovieEntity, {
 });
 
 sequelize.sync({
-        force: true
+        force: false
     })
     .then(() => {
         console.log(`Database & tables created!`)

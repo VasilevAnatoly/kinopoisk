@@ -2,8 +2,9 @@ import React from 'react';
 import { withRouter } from "react-router-dom";
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { Row, Col, Table, Form, FormGroup, Label, Input, Button } from 'reactstrap';
+import { Table, Form, FormGroup, Label, Input, Button } from 'reactstrap';
 
+// Испортируем метод из списка actions для получения топ-10 фильмов на выбранную дату
 import { getMovies } from 'kinopoisk/store/actions/apiActions/apiMoviesActions';
 
 class TopMovies extends React.Component {
@@ -14,11 +15,13 @@ class TopMovies extends React.Component {
         }
     }
 
+    // Возвращаем текущую дату в формате yyyy-mm-dd
     getCurrentDate() {
         var d = new Date();
         return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2);
     }
 
+    // Обработка выбора пользователем даты
     onСhangeDateClick = (val) => {
         const value = val.target ? val.target.value : val;
         this.setState({
@@ -26,6 +29,7 @@ class TopMovies extends React.Component {
         });
     };
 
+    // Обработка нажатия пользователем кнопки "Найти" для оправки запроса на сервер с конкретной датой
     findMovies(e) {
         e.preventDefault();
         e.stopPropagation();
@@ -34,6 +38,7 @@ class TopMovies extends React.Component {
         });
     }
 
+    // Отправка запроса на сервер с дефолтной датой (сегодняшней) и инициализация поля date в state компонента
     componentDidMount() {
         const date = this.getCurrentDate();
         this.props.getMovies({
@@ -48,7 +53,7 @@ class TopMovies extends React.Component {
         const movies = this.props.topMovies.movies;
         return (
             <React.Fragment>
-                <Form inline style={{ marginBottom: 20 }} autoComplete="off" onSubmit={(e) => this.findMovies(e)}>
+                <Form inline id="dateform" autoComplete="off" onSubmit={(e) => this.findMovies(e)}>
                     <FormGroup>
                         <Label for="date" style={{ marginRight: 20 }}>Дата</Label>
                         <Input
@@ -60,7 +65,6 @@ class TopMovies extends React.Component {
                             onChange={(e) => {
                                 this.onСhangeDateClick(e);
                             }}
-                            style={{ marginRight: 20 }}
                         />
                         <Button color="primary">Найти</Button>
                     </FormGroup>
@@ -76,6 +80,7 @@ class TopMovies extends React.Component {
                         </tr>
                     </thead>
                     <tbody>
+                        {/* Отображаем таблицу с фильмами или выводим строку с сообщением, если фильмы не были найдены на выбранную дату */}
                         {movies && movies.length ? movies.map(movie => {
                             return (
                                 <tr key={movie.id}>
@@ -100,6 +105,7 @@ class TopMovies extends React.Component {
     }
 }
 
+//Инициализируем сохранение в props компонента данных из store
 const mapStateToProps = ({ apiStore }) => ({
     topMovies: apiStore.movies.topMovies,
 });
