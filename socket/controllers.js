@@ -3,7 +3,7 @@ const comments = controllers.comments;
 const movies = controllers.movies;
 
 // Функция для обработки сохранения в БД лайка/дизлайка у комментария
-function addCommentLikeDislike(data) {
+let addCommentLikeDislike = (data) => {
   const client = this;
   // Вызов функции сохранения данных В БД
   comments.newCommentLikeDislike(data.body.commentId, data.body.like)
@@ -19,7 +19,7 @@ function addCommentLikeDislike(data) {
 }
 
 // Функция для обработки сохранения в БД лайка/дизлайка у фильма
-function addMovieLikeDislike(data) {
+let addMovieLikeDislike = (data) => {
   const client = this;
   movies.newMovieLikeDislike(data.body.movieId, data.body.like)
     .then(() => {
@@ -32,7 +32,7 @@ function addMovieLikeDislike(data) {
 }
 
 // Функция для обработки сохранения в БД комментария к фильму
-function addCommentToMovie(data) {
+let addCommentToMovie = (data) => {
   const client = this;
   comments.addCommentToMovie(data.body.author, data.body.comment, data.body.movieId)
     .then(newComment => {
