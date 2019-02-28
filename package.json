@@ -6,6 +6,7 @@
   "scripts": {
     "start-scrap": "set NODE_ENV=development && nodemon start.js",
     "build": "set NODE_ENV=development && nodemon server/index.js",
+    "prod": "set NODE_ENV=production && node server/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Anatoly Vasilyev",
