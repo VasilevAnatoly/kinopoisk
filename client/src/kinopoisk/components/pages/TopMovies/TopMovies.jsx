@@ -2,7 +2,7 @@ import React from 'react';
 import { withRouter } from "react-router-dom";
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { Table, Form, FormGroup, Label, Input, Button } from 'reactstrap';
+import { Table, Form, FormGroup, Label, Input, Button, Row, Col } from 'reactstrap';
 
 // Испортируем метод из списка actions для получения топ-10 фильмов на выбранную дату
 import { getMovies } from 'kinopoisk/store/actions/apiActions/apiMoviesActions';
@@ -11,8 +11,17 @@ class TopMovies extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            date: ''
+            date: '',
+            year: '',
+            filteredMovies: null
         }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+            filteredMovies: nextProps.topMovies.movies,
+        });
+
     }
 
     // Возвращаем текущую дату в формате yyyy-mm-dd
@@ -28,6 +37,27 @@ class TopMovies extends React.Component {
             date: value
         });
     };
+
+    onСhangeYearClick = (val) => {
+        const value = parseInt(val.target ? val.target.value : val);
+        if (value) {
+            let filteredMovies = this.props.topMovies.movies.slice();
+            filteredMovies = filteredMovies.filter(movie => {
+                return movie.year.toString().startsWith(value.toString());
+            });
+            this.setState({
+                year: value,
+                filteredMovies: filteredMovies
+            });
+        }
+        else {
+            this.setState({
+                year: '',
+                filteredMovies: this.props.topMovies.movies.slice()
+            });
+        }
+    }
+
 
     // Обработка нажатия пользователем кнопки "Найти" для оправки запроса на сервер с конкретной датой
     findMovies(e) {
@@ -50,25 +80,47 @@ class TopMovies extends React.Component {
     }
 
     render() {
-        const movies = this.props.topMovies.movies;
+        // const movies = this.props.topMovies.movies;
+        const movies = this.state.filteredMovies;
         return (
             <React.Fragment>
-                <Form inline id="dateform" autoComplete="off" onSubmit={(e) => this.findMovies(e)}>
-                    <FormGroup>
-                        <Label for="date" style={{ marginRight: 20 }}>Дата</Label>
-                        <Input
-                            type="date"
-                            name="date"
-                            id="date"
-                            value={this.state.date}
-                            placeholder="Выберите дату"
-                            onChange={(e) => {
-                                this.onСhangeDateClick(e);
-                            }}
-                        />
-                        <Button color="primary">Найти</Button>
-                    </FormGroup>
-                </Form>
+                <Row id="dateform">
+                    <Col md={6}>
+                        <Form inline autoComplete="off" onSubmit={(e) => this.findMovies(e)}>
+                            <FormGroup>
+                                <Label for="date" style={{ marginRight: 20 }}>Дата</Label>
+                                <Input
+                                    type="date"
+                                    name="date"
+                                    id="date"
+                                    value={this.state.date}
+                                    placeholder="Выберите дату"
+                                    onChange={(e) => {
+                                        this.onСhangeDateClick(e);
+                                    }}
+                                />
+                                <Button color="primary">Найти</Button>
+                            </FormGroup>
+                        </Form>
+                    </Col>
+                    <Col md={{ size: 6 }}>
+                        <Form inline style={{ float: "right" }}>
+                            <FormGroup>
+                                <Label for="date" style={{ marginRight: 20 }}>Год</Label>
+                                <Input
+                                    type="text"
+                                    name="year"
+                                    id="year"
+                                    value={this.state.year}
+                                    placeholder="Введите год"
+                                    onChange={(e) => {
+                                        this.onСhangeYearClick(e);
+                                    }}
+                                />
+                            </FormGroup>
+                        </Form>
+                    </Col>
+                </Row>
                 <Table striped bordered hover responsive className="text-center">
                     <thead>
                         <tr>
@@ -100,7 +152,7 @@ class TopMovies extends React.Component {
                             </tr>}
                     </tbody>
                 </Table>
-            </React.Fragment>
+            </React.Fragment >
         );
     }
 }
